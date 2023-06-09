@@ -1,0 +1,124 @@
+stop_set=set(stopwords.words("english"))
+for i in range(0,march.shape[0]):
+    text_set=set(march['tokenized_Tweet'][i])
+    march['filteredToken'][i]=list(text_set-stop_set)#set difference operation
+
+    def get_sentiment(text):
+    text = tb(text)
+    sentiment_polarity = text.sentiment.polarity
+    sentiment_subjectivity = text.sentiment.subjectivity
+    if sentiment_polarity > 0:
+        sentiment_label = 'Positive'
+    elif sentiment_polarity < 0:
+        sentiment_label = 'Negative'
+    else:
+        sentiment_label = 'Neutral'
+    result = {'polarity':sentiment_polarity,
+              'subjectivity':sentiment_subjectivity,
+              'sentiment':sentiment_label}
+    return result
+
+    march['sentiment_results'] = march['clean_tweet'].apply(get_sentiment)
+april['sentiment_results'] = april['clean_tweet'].apply(get_sentiment)
+may['sentiment_results'] = may['clean_tweet'].apply(get_sentiment)
+june['sentiment_results'] = june['clean_tweet'].apply(get_sentiment)
+july['sentiment_results'] = july['clean_tweet'].apply(get_sentiment)
+august['sentiment_results'] = august['clean_tweet'].apply(get_sentiment)
+
+march = march.join(pd.json_normalize(march['sentiment_results']))
+april = april.join(pd.json_normalize(april['sentiment_results']))
+may = may.join(pd.json_normalize(may['sentiment_results']))
+june = june.join(pd.json_normalize(june['sentiment_results']))
+july = july.join(pd.json_normalize(july['sentiment_results']))
+august = august.join(pd.json_normalize(august['sentiment_results']))
+
+def get_sentiment(text):
+    text = tb(text)
+    sentiment_polarity = text.sentiment.polarity
+    sentiment_subjectivity = text.sentiment.subjectivity
+    if sentiment_polarity > 0:
+        sentiment_label = 'Positive'
+    elif sentiment_polarity < 0:
+        sentiment_label = 'Negative'
+    else:
+        sentiment_label = 'Neutral'
+    result = {'polarity':sentiment_polarity,
+              'subjectivity':sentiment_subjectivity,
+              'sentiment':sentiment_label}
+    return result
+
+    list=[]
+Positive_Count=[]
+Negative_Count=[]
+Neutral_Count=[]
+
+list=march['sentiment'].value_counts()
+Positive_Count.append(list[0])
+Negative_Count.append(list[2])
+Neutral_Count.append(list[1])
+
+april['sentiment'].value_counts()
+
+list=april['sentiment'].value_counts()
+Positive_Count.append(list[0])
+Negative_Count.append(list[2])
+Neutral_Count.append(list[1])
+
+a=Positive_Count
+b=Neutral_Count
+c=Negative_Count
+print(a,b,c)
+
+list=may['sentiment'].value_counts()
+Positive_Count.append(list[0])
+Negative_Count.append(list[2])
+Neutral_Count.append(list[1])
+
+a=Positive_Count
+b=Neutral_Count
+c=Negative_Count
+print(a,b,c)
+
+list=june['sentiment'].value_counts()
+Positive_Count.append(list[0])
+Negative_Count.append(list[2])
+Neutral_Count.append(list[1])
+
+import gensim #the library for Topic modelling
+from gensim.models.ldamulticore import LdaMulticore
+from gensim import corpora, models
+from nltk.stem.wordnet import WordNetLemmatizer
+import pyLDAvis #LDA visualization library
+import pyLDAvis.gensim_models
+from gensim.corpora import Dictionary
+from gensim.models.ldamodel import LdaModel
+from gensim.models.coherencemodel import CoherenceModel
+import matplotlib.colors as mcolors
+from matplotlib.patches import Rectangle
+
+def sent_to_words(sentences):
+    for sent in sentences:
+        sent = re.sub('\S*@\S*\s?', '', sent)  # remove emails
+        sent = re.sub('\s+', ' ', sent)  # remove newline chars
+        sent = re.sub("\'", "", sent)  # remove single quotes
+        sent = gensim.utils.simple_preprocess(str(sent), deacc=True) 
+        yield(sent)  
+
+# Convert to list
+data_march = march['clean_tweet']
+data_words_march = list(sent_to_words(data_march))
+
+def my_lemma_march(token,i=0):
+    word=tb(token)
+    tags=word.tags
+    sample=Word(tags[0][0])
+    if tags[0][1][0] =='V':
+        x=sample.lemmatize('v')
+        tweets_tokens_Month[i]=x
+    else:
+        x=sample.lemmatize()
+        tweets_tokens_Month[i]=x
+
+for i in range(0,len(tweets_tokens_Month)):
+    text=tweets_tokens_Month[i]
+    my_lemma_march(text,i)

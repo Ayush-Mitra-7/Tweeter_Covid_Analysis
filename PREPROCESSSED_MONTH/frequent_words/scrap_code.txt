@@ -1,0 +1,173 @@
+del_amp = BeautifulSoup(march['tweet'][1], 'lxml')
+del_amp_text = del_amp.get_text()
+print(del_amp_text)
+
+def my_lemma_march(token,i=0):
+    word=tb(token)
+    tags=word.tags
+    sample=Word(tags[0][0])
+    if tags[0][1][0] =='V':
+        x=sample.lemmatize('v')
+        tweets_tokens_march[i]=x
+    else:
+        x=sample.lemmatize()
+        tweets_tokens_march[i]=x
+def my_lemma_april(token,i=0):
+    word=tb(token)
+    tags=word.tags
+    sample=Word(tags[0][0])
+    if tags[0][1][0] =='V':
+        x=sample.lemmatize('v')
+        tweets_tokens_april[i]=x
+    else:
+        x=sample.lemmatize()
+        tweets_tokens_april[i]=x
+def my_lemma_may(token,i=0):
+    word=tb(token)
+    tags=word.tags
+    sample=Word(tags[0][0])
+    if tags[0][1][0] =='V':
+        x=sample.lemmatize('v')
+        tweets_tokens_may[i]=x
+    else:
+        x=sample.lemmatize()
+        tweets_tokens_may[i]=x
+def my_lemma_june(token,i=0):
+    word=tb(token)
+    tags=word.tags
+    sample=Word(tags[0][0])
+    if tags[0][1][0] =='V':
+        x=sample.lemmatize('v')
+        tweets_tokens_june[i]=x
+    else:
+        x=sample.lemmatize()
+        tweets_tokens_june[i]=x
+def my_lemma_july(token,i=0):
+    word=tb(token)
+    tags=word.tags
+    sample=Word(tags[0][0])
+    if tags[0][1][0] =='V':
+        x=sample.lemmatize('v')
+        tweets_tokens_july[i]=x
+    else:
+        x=sample.lemmatize()
+        tweets_tokens_july[i]=x
+def my_lemma_august(token,i=0):
+    word=tb(token)
+    tags=word.tags
+    sample=Word(tags[0][0])
+    if tags[0][1][0] =='V':
+        x=sample.lemmatize('v')
+        tweets_tokens_august[i]=x
+    else:
+        x=sample.lemmatize()
+        tweets_tokens_august[i]=x
+    for i in range(0,len(tweets_tokens_march)):
+    text=tweets_tokens_march[i]
+    my_lemma_march(text,i)
+for i in range(0,len(tweets_tokens_april)):
+    text=tweets_tokens_april[i]
+    my_lemma_april(text,i)
+for i in range(0,len(tweets_tokens_may)):
+    text=tweets_tokens_may[i]
+    my_lemma_may(text,i)
+for i in range(0,len(tweets_tokens_june)):
+    text=tweets_tokens_june[i]
+    my_lemma_june(text,i)
+for i in range(0,len(tweets_tokens_july)):
+    text=tweets_tokens_july[i]
+    my_lemma_july(text,i)
+for i in range(0,len(tweets_tokens_august)):
+    text=tweets_tokens_august[i]
+    my_lemma_august(text,i)
+
+remove_custom_words(tweets_tokens_march,custom_words)
+remove_single_char(tweets_tokens_march)
+remove_dual_char(tweets_tokens_march)
+
+
+remove_custom_words(tweets_tokens_april,custom_words)
+remove_single_char(tweets_tokens_april)
+remove_dual_char(tweets_tokens_april)
+
+
+remove_custom_words(tweets_tokens_may,custom_words)
+remove_single_char(tweets_tokens_may)
+remove_dual_char(tweets_tokens_may)
+
+
+remove_custom_words(tweets_tokens_june,custom_words)
+remove_single_char(tweets_tokens_june)
+remove_dual_char(tweets_tokens_june)
+
+
+remove_custom_words(tweets_tokens_july,custom_words)
+remove_single_char(tweets_tokens_july)
+remove_dual_char(tweets_tokens_july)
+
+remove_custom_words(tweets_tokens_august,custom_words)
+remove_single_char(tweets_tokens_august)
+remove_dual_char(tweets_tokens_august)
+
+remove_custom_words(tweets_tokens_august,custom_words)
+
+def remove_custom_words(list,c_list):
+        for token in list:
+            for c_word in c_list:
+                if( c_word==token):
+                    list.remove(token)
+                else:
+                    pass
+
+                custom_words = ['from', 'subject', 're', 'edu', 'use', 'not', 'would', 'say', 'could', '_', 'be', 'know', 'good', 'go', 'get', 'do', 'done', 'try', 'many', 'some', 'nice', 'thank', 'think', 'see', 'rather', 'easy', 'easily', 'lot', 'lack', 'make', 'want', 'seem', 'run', 'need', 'even', 'right', 'line', 'even', 'also', 'may', 'take', 'come', '%', '.', 'the', 'etc', 'pls', 'btw', 'let', 'hgd', 'get', 'bkc', 'aint', 'wto', 'shri', 'sit', 'aaj', 'gayi',
+                'tel','lene', 'plz', 'hbl','psl', 'reg', 'hyd', ]
+
+
+
+march_top_scores=[]
+for i in range(0,10):
+    march_top_scores.append(tweet_df_march['scores'][i])
+
+march_top_name=[]
+for i in range(0,10):
+    march_top_name.append(tweet_df_march['words'][i])
+
+
+
+# colors
+
+# explosion
+explode = (0.05,)*10
+
+# Pie Chart
+plt.pie(march_top_scores, labels=march_top_name, pctdistance=0.85,
+		autopct='%1.1f%%',explode=explode)
+
+# draw circle
+centre_circle = plt.Circle((0, 0), 0.70, fc='white')
+fig = plt.gcf()
+
+# Adding Circle in Pie chart
+fig.gca().add_artist(centre_circle)
+
+# Adding Title of chart
+plt.title('March Top Ten Pie Chart')
+
+# Displaying Chart
+plt.show()
+
+
+
+mask = np.array(Image.open('Twitter-PNG-Image.png'))
+text2 = " ".join(title for title in df['words'])
+wordcloud = WordCloud(width=1600, mask =   mask,height=800,max_font_size=200,max_words=50,collocations=False,background_color = 'white').generate(text2)
+f = plt.figure(figsize=(50,50))
+# f.add_subplot(1,2, 1)
+# plt.imshow(mask, cmap=plt.cm.gray, interpolation='bilinear')
+# plt.title('Original Image', size=40)
+plt.axis("off")
+# f.add_subplot(1,2, 2)
+plt.imshow(wordcloud, interpolation='bilinear')
+plt.title('Generated Word Cloud', size=40)
+plt.axis("off")
+plt.show()
